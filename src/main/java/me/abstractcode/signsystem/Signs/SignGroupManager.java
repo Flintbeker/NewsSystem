@@ -69,18 +69,19 @@ public class SignGroupManager {
 
             for(File signFile : files){
 
-                if(signFile.getName().contains(".sign")){
+                if(signFile.getName().contains( ".sign" )) {
 
                     Sign s;
                     FileInputStream fis = new FileInputStream( signFile );
                     ObjectInputStream ois = new ObjectInputStream(fis);
                     s = (Sign) ois.readObject();
-                    signs.add(s);
-                    Bukkit.getConsoleSender().sendMessage("Loaded Sign...");
 
+                        signs.add(s);
+                        Bukkit.getConsoleSender().sendMessage("Loaded Sign...");
+                   s.verify();
                 } else {
 
-                    Bukkit.getConsoleSender().sendMessage(System.prefix + "There is a file that is not a Sign: " + signFile.getAbsolutePath());
+                    Bukkit.getConsoleSender().sendMessage(System.prefix + "There is a file that is not a Sign: " + signFile.getAbsolutePath() );
 
                 }
 
@@ -88,6 +89,7 @@ public class SignGroupManager {
 
         } catch ( Exception e ) {
 
+            e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(System.prefix + "There are no Signs!");
 
         }
@@ -130,9 +132,20 @@ public class SignGroupManager {
 
     public static void saveAll() {
 
+        new File(fileName).delete();
+        new File(fileName).getParentFile().mkdir();
+        new File(groupFileName).delete();
+        new File(groupFileName).getParentFile().mkdir();
+
         for( Sign s : signs ){
 
             saveSign( s );
+
+        }
+
+        for( SignGroup group : groups ) {
+
+            saveSignGroup( group );
 
         }
 
@@ -149,7 +162,7 @@ public class SignGroupManager {
             }
 
         }
-        return true;
+        return false;
     }
 
     public static SignGroup getSignGroupByName( String groupName ){
@@ -159,6 +172,39 @@ public class SignGroupManager {
             if( group.name.equals( groupName ) ) {
 
                 return group;
+
+            }
+
+        }
+        return null;
+
+    }
+
+    public static void deleteGroup( SignGroup group ) {
+
+        File f = new File(groupFileName + group.name + ".group");
+        f.delete();
+        groups.remove( group );
+
+    }
+
+    public static void deleteSign( Sign s ) {
+
+        File f = new File(fileName + s.name + ".sign");
+        Bukkit.broadcastMessage(fileName + s.name + ".sign");
+        f.delete();
+        s = null;
+        signs.remove(s);
+
+    }
+
+    public static Sign getSignByName( String name ) {
+
+        for( Sign sign : signs ) {
+
+            if( sign.name.equals( name ) ) {
+
+                return sign;
 
             }
 

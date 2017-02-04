@@ -24,6 +24,7 @@ public class SignPlaceEvent implements Listener{
             if(SignGroupManager.isSignGroupValid(e.getLine(1 )) ){
                 SignGroup group = SignGroupManager.getSignGroupByName( e.getLine(1) );
                 Sign s = new Sign(UUID.randomUUID().toString(), group, e.getBlock().getLocation());
+                SignGroupManager.signs.add( s );
                 e.getPlayer().sendMessage(System.prefix + "Sucessfully placed a Sign with the ID " + s.name + " and the Group " + group.name + "!");
 
             } else {

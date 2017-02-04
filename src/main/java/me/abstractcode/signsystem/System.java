@@ -1,5 +1,6 @@
 package me.abstractcode.signsystem;
 
+import me.abstractcode.signsystem.Commands.SignSystem;
 import me.abstractcode.signsystem.Events.SignPlaceEvent;
 import me.abstractcode.signsystem.Signs.Sign;
 import me.abstractcode.signsystem.Signs.SignGroup;
@@ -37,19 +38,31 @@ public class System extends JavaPlugin {
     @Override
     public void onDisable() {
 
+         save();
+
+    }
+
+    private void save(){
+
+        SignGroupManager.saveAll();
+
     }
 
     private void register(){
 
+        //Events
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents( new SignPlaceEvent(), this );
+
+        //Commands
+        getCommand("signsystem").setExecutor(new SignSystem());
 
     }
 
     private void signs() {
 
-        SignGroupManager.loadSigns();
         SignGroupManager.loadSignGroup();
+        SignGroupManager.loadSigns();
 
     }
 
