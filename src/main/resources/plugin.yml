@@ -1,0 +1,6 @@
+name: SignSystem
+version: 1.0
+main: me.abstractcode.signsystem.System
+author: AbstractCode
+commands:
+   SignSystem:
